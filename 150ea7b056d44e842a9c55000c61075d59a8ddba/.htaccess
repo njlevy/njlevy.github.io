@@ -1,4 +1,0 @@
-AuthType Basic
-AuthName "restricted area"
-AuthUserFile /home/nettlefo/public_html/myba/.htpasswd
-require valid-user

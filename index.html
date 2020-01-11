@@ -1,134 +1,147 @@
-
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>bookmate</title>
+    <style>
+    	@import "compass/css3";
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+body{
+   text-align:center;
+   padding:10%;
+   background: #1b1b1b;
+   font-family: 'Roboto', sans-serif;
+}
+.btn{
+   cursor:pointer;
+   display:inline-block;
+   padding:30px;
+   background: #94a657;
+   border-radius: 4px;
+   color: #fff;
+   text-transform:uppercase;
+   line-height:20px;
+   @include transition(box-shadow .25s ease);
+   &:after{
+      content:'';
+      display:inline-block;
+      color: #94a657;
+      background:#fff;
+      font-family: 'FontAwesome';
+      padding:3px;
+      border-radius: 50%;
+      height:20px;
+      width:20px;
+      margin-left:8px;
+      padding-left: 4.5px;
+      padding-right:1.5px;
+   }
+   &.playing{
+       &:after{
+         padding:3px;
+         content:'';
+      }
+   }
+}
+    </style>
+  </head>
+  <body>
+  <audio id="nyan" src="1.mp3" preload="metadata" type="audio/mpeg">
+   Your browser does not support the audio element.
+</audio>
+<a class="btn" id="nyan-btn">1</a>
+ <audio id="nyan2" src="2.mp3" preload="metadata" type="audio/mpeg">
+   Your browser does not support the audio element.
+</audio>
+<a class="btn" id="nyan-btn2">2</a>
+ <audio id="nyan3" src="3.mp3" preload="metadata" type="audio/mpeg">
+   Your browser does not support the audio element.
+</audio>
+<a class="btn" id="nyan-btn3">3</a>
+ <audio id="nyan4" src="4.mp3" preload="metadata" type="audio/mpeg">
+   Your browser does not support the audio element.
+</audio>
+<a class="btn" id="nyan-btn4">4</a>
+ <audio id="nyan5" src="5.mp3" preload="metadata" type="audio/mpeg">
+   Your browser does not support the audio element.
+</audio>
+<a class="btn" id="nyan-btn5">5</a>
+  </body>
+  <footer>
+  	<script>
+  		
+  		var nyan = document.getElementById('nyan');
+var nyanBtn = document.getElementById('nyan-btn');
+  		var nyan2 = document.getElementById('nyan2');
+var nyanBtn2 = document.getElementById('nyan-btn2');
+	var nyan3 = document.getElementById('nyan3');
+var nyanBtn3 = document.getElementById('nyan-btn3');
+	var nyan4 = document.getElementById('nyan4');
+var nyanBtn4 = document.getElementById('nyan-btn4');
+	var nyan5 = document.getElementById('nyan5');
+var nyanBtn5 = document.getElementById('nyan-btn5');
 
-</head>
-
-<style>
-
-body {
-
-	background-image: url('grunge_patterns.jpg');
-	background-attachment: fixed;
-	color: #333;
+function playPause(song){
+   if (song.paused && song.currentTime >= 0 && !song.ended) {
+      song.play();
+   } else {
+      song.pause();
+   }
 }
 
-.box {
-	border-radius: 3px;
-	background: rgba(101, 101, 101, 0.7); margin: auto; padding: 12px;
+function reset(btn, song){
+   if(btn.classList.contains('playing')){
+      btn.classList.toggle('playing');
+   }
+   song.pause();
+   song.currentTime = 0;
 }
 
-.lightbox {
-	zoom: 1.5;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(10, 10, 10, 0.8);
-	text-align: center;
-	margin: auto;
-
+function progress(btn, song){
+   setTimeout(function(){
+      var end = song.duration; 
+      var current = song.currentTime;
+      var percent = current/(end/100);
+      //check if song is at the end
+      if(current==end){
+         reset(btn, song);
+      }
+      //set inset box shadow
+      btn.style.boxShadow = "inset " + btn.offsetWidth * (percent/100) + "px 0px 0px 0px rgba(0,0,0,0.125)"
+      //call function again
+      progress(btn, song);     
+   }, 1000);
 }
 
-div.horizontal {
-	display: flex;
-	justify-content: center;
-	height: 100%;
-}
-
-div.vertical {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	width: 100%;
-}
-
-::-webkit-input-placeholder {
-   color: #955;
-   text-align: center;
-}
-
-::-moz-placeholder {
-   color: #955;
-   text-align: center;
-}
-
-:-ms-input-placeholder {
-   color: #955;
-   text-align: center;
-}
-
-</style>
-
-<body>
-
-	<div id="loginbox" class="lightbox" >
-		<div class="horizontal">
-			<div class="vertical">
-				<div class="box">
-					<input style="margin: 16px; text-align: center;" id="password" type="password" placeholder="password" /> <br />
-					<button id="loginbutton" type="button">Enter</button>
-					<p id="wrongPassword" style="display: none">wrong password</p>
-				</div>
-			</div>
-		</div>
-	</div>
+nyanBtn.addEventListener('click', function(){
+   nyanBtn.classList.toggle('playing');
+   playPause(nyan);
+   progress(nyanBtn, nyan);
+});
+nyanBtn2.addEventListener('click', function(){
+   nyanBtn2.classList.toggle('playing');
+   playPause(nyan2);
+   progress(nyanBtn2, nyan2);
+});
+nyanBtn3.addEventListener('click', function(){
+   nyanBtn3.classList.toggle('playing');
+   playPause(nyan3);
+   progress(nyanBtn3, nyan3);
+});
+nyanBtn4.addEventListener('click', function(){
+   nyanBtn4.classList.toggle('playing');
+   playPause(nyan4);
+   progress(nyanBtn4, nyan4);
+});
+nyanBtn5.addEventListener('click', function(){
+   nyanBtn5.classList.toggle('playing');
+   playPause(nyan5);
+   progress(nyanBtn5, nyan5);
+});
 
 
 
-	<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  	</script>
 
-
-	 <script type="text/javascript" src="https://rawcdn.githack.com/chrisveness/crypto/7067ee62f18c76dd4a9d372a00e647205460b62b/sha1.js"></script>
-
-	<script type="text/javascript">
-	"use strict";
-
-
-	function loadPage(pwd) {
-
-		var hash= pwd;
-		hash= Sha1.hash(pwd);
-		var url= hash + "/index.html";
-
-		$.ajax({
-			url : url,
-			dataType : "html",
-			success : function(data) {
-
-				window.location= url;
-
-			},
-			error : function(xhr, ajaxOptions, thrownError) {
-
-
-				parent.location.hash= hash;
-
-				//$("#wrongPassword").show();
-				$("#password").attr("placeholder","wrong password");
-				$("#password").val("");
-			}
-		});
-	}
-
-
-	$("#loginbutton").on("click", function() {
-		loadPage($("#password").val());
-	});
-	$("#password").keypress(function(e) {
-		if (e.which == 13) {
-
-			loadPage($("#password").val());
-		}
-	});
-	$("#password").focus();
-
-	</script>
-
-</body>
+  </footer>
 </html>
