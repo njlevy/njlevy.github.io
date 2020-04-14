@@ -1,167 +1,328 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>bookmate</title>
-    <style>
-    	@import "compass/css3";
+	<head>
+		<meta charset="UTF-8">
+			<meta content="width=device-width, initial-scale=1" name="viewport" />
 
-body{
-   text-align:center;
-   padding:10%;
-   background: #1b1b1b;
-   font-family: 'Roboto', sans-serif;
-}
-.btn{
-   cursor:pointer;
-   display:inline-block;
-   padding:30px;
-   background: #94a657;
-   border-radius: 4px;
-   color: #fff;
-   text-transform:uppercase;
-   line-height:20px;
-   @include transition(box-shadow .25s ease);
-   &:after{
-      content:'';
-      display:inline-block;
-      color: #94a657;
-      background:#fff;
-      font-family: 'FontAwesome';
-      padding:3px;
-      border-radius: 50%;
-      height:20px;
-      width:20px;
-      margin-left:8px;
-      padding-left: 4.5px;
-      padding-right:1.5px;
-   }
-   &.playing{
-       &:after{
-         padding:3px;
-         content:'';
-      }
-   }
-}
-    </style>
-  </head>
-  <body>
-  <audio id="nyan" src="1.mp3" preload="metadata" type="audio/mpeg">
-   Your browser does not support the audio element.
-</audio>
-<a class="btn" id="nyan-btn">1</a>
- <audio id="nyan2" src="2.mp3" preload="metadata" type="audio/mpeg">
-   Your browser does not support the audio element.
-</audio>
-<a class="btn" id="nyan-btn2">2</a>
- <audio id="nyan3" src="3.mp3" preload="metadata" type="audio/mpeg">
-   Your browser does not support the audio element.
-</audio>
-<a class="btn" id="nyan-btn3">3</a>
- <audio id="nyan4" src="4.mp3" preload="metadata" type="audio/mpeg">
-   Your browser does not support the audio element.
-</audio>
-<a class="btn" id="nyan-btn4">4</a>
- <audio id="nyan5" src="5.mp3" preload="metadata" type="audio/mpeg">
-   Your browser does not support the audio element.
-</audio>
-<a class="btn" id="nyan-btn5">5</a>
-  </body>
-  <footer>
-  	<script>
-  		
-  		var nyan = document.getElementById('nyan');
-var nyanBtn = document.getElementById('nyan-btn');
-  		var nyan2 = document.getElementById('nyan2');
-var nyanBtn2 = document.getElementById('nyan-btn2');
-	var nyan3 = document.getElementById('nyan3');
-var nyanBtn3 = document.getElementById('nyan-btn3');
-	var nyan4 = document.getElementById('nyan4');
-var nyanBtn4 = document.getElementById('nyan-btn4');
-	var nyan5 = document.getElementById('nyan5');
-var nyanBtn5 = document.getElementById('nyan-btn5');
+<!-- 		<link rel="stylesheet" type="text/css" href="css/style.css">
+ -->		<link rel="stylesheet" type="text/css" href="css/lity.css">
 
-function playPause(song){
-   if (song.paused && song.currentTime >= 0 && !song.ended) {
-      song.play();
-   } else {
-      song.pause();
-   }
+		<title>3 min</title>
+		<style>
+@font-face {
+	font-family: narkis;
+	src: url(fonts/NarkisBlock-Bold.otf);
 }
 
-function reset(btn, song){
-   if(btn.classList.contains('playing')){
-      btn.classList.toggle('playing');
-   }
-   song.pause();
-   song.currentTime = 0;
+@font-face {
+	font-family: fallback;
+	src: url(fonts/OpenSansHebrew-Bold.ttf);
 }
 
-function progress(btn, song){
-   setTimeout(function(){
-      var end = song.duration; 
-      var current = song.currentTime;
-      var percent = current/(end/100);
-      //check if song is at the end
-      if(current==end){
-         reset(btn, song);
-      }
-      //set inset box shadow
-      btn.style.boxShadow = "inset " + btn.offsetWidth * (percent/100) + "px 0px 0px 0px rgba(0,0,0,0.125)"
-      //call function again
-      progress(btn, song);     
-   }, 1000);
+body {
+	text-align: right;
+	font-family: narkis, fallback, sans-serif;
+	margin: 0;
+	background: black;
+}
+a.thumb:link {
+    text-decoration: inherit;
+    color: inherit;
 }
 
-nyanBtn.addEventListener('click', function(){
-   nyanBtn.classList.toggle('playing');
-   playPause(nyan);
-    pause(nyan2);
-    pause(nyan3);
-    pause(nyan4);
-    pause(nyan5);
-   progress(nyanBtn, nyan);
-});
-nyanBtn2.addEventListener('click', function(){
-   nyanBtn2.classList.toggle('playing');
-   playPause(nyan2);
-   pause(nyan);
-    pause(nyan3);
-    pause(nyan4);
-    pause(nyan5);
-   progress(nyanBtn2, nyan2);
-});
-nyanBtn3.addEventListener('click', function(){
-   nyanBtn3.classList.toggle('playing');
-   playPause(nyan3);
-    pause(nyan);
-    pause(nyan2);
-    pause(nyan4);
-    pause(nyan5);
-   progress(nyanBtn3, nyan3);
-});
-nyanBtn4.addEventListener('click', function(){
-   nyanBtn4.classList.toggle('playing');
-   playPause(nyan4);
-    pause(nyan);
-    pause(nyan3);
-    pause(nyan2);
-    pause(nyan5);
-   progress(nyanBtn4, nyan4);
-});
-nyanBtn5.addEventListener('click', function(){
-   nyanBtn5.classList.toggle('playing');
-   playPause(nyan5);
-    pause(nyan);
-    pause(nyan3);
-    pause(nyan4);
-    pause(nyan2);
-   progress(nyanBtn5, nyan5);
-});
+a.thumb:visited {
+    text-decoration: inherit;
+    color: inherit;
+}
+.flex-grid {
+	display: flex;
+	flex-wrap: wrap;
+	flex-flow: row wrap;
+	justify-content: space-between;
+}
+.thumb.hidden-thumb {
+	visibility: hidden;
+	height: 0;
+	padding: 0;
+	margin: 0;
+	border-top-width: 0;
+	border-bottom-width: 0;
+}
+.thumb {
+	min-width: 275px;
+	flex: 1 0 16.6667%;
+background-size: cover;
+    background-position: 50% 50%;
+	
+	height: 195px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 1px solid black;
+
+	
+}
+video{
+	height: 90vh !important;
+	background: black !important;
+}
+/*.thumb:hover {
+	border: 2px solid #48ff31;
+	transition-delay: 0;
+	transition-duration: 0;
+}*/
+.thumb:hover .name, .thumb:hover .subtitle {
+	transition-delay: .5s;
+	transition-duration: .6s;
+	opacity: 100%;
+}
+.overlay {
+	top: 50%;
+	background: #48ff31;
+	width: 0%;
+	height: 100%;
+	transition: all .6s cubic-bezier(0.83, 0, 0.17, 1);
+}
+.thumb:hover .overlay {
+	transition: all  .8s cubic-bezier(0.83, 0, 0.17, 1);
+	left: 0;
+
+	width: 100%;
+}
+.name, .subtitle {
+	display: block;
+	opacity: 0;
+		padding: 0 12%;
+	line-height: 1;
+}
+.name {
+	font-size: 3em;
+	padding-top: 40px;
+}
+
+/*mobile*/
+	@media only screen and (max-width: 500px){
+		.thumb {
+	min-width: 49%;
+}
+			.overlay{
+	/* top: 50%; */
+    background: #48ff31;
+    width: 100%;
+    height: 34px;
+    color: #000000;
+    transition: none;
+    top: calc(100% - 34px);
+    position: relative;
+		}
+		.name, .subtitle {
+    display: block;
+    opacity: 100%;
+    font-size: 0.8em;
+    padding: 0 5px;
+    line-height: 1;
+}
+.name {
+    font-size: 1.2em;
+    padding-top: 10px;
+    text-align: center;
+}	
+.subtitle{
+	display: none;
+}
+		}
 
 
 
-  	</script>
+		</style>
+	</head>
+	<body>
+		<div class="flex-grid">
+			<div class="thumb" style="background-image: url(images/face1.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face2.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face3.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face4.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face5.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face6.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face7.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face8.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face9.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face10.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face11.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face12.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face13.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face14.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face15.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face16.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face1.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face2.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face3.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face4.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face5.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face6.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face7.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face8.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face9.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face10.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<div class="thumb" style="background-image: url(images/face11.png);">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</div>
+			<a data-lity class="thumb" style="background-image: url(images/face12.png);" href="video/dang.mp4" onclick="playSelected(this.getAttribute('href'));">
+				<div class="overlay">
+					<span class="name">ישראל ישראלי</span>
+					<span class="subtitle">הפקולטה לאמנויות</span>
+				</div>
+			</a>
+	<!-- 		<a data-fslightbox href="https://i.imgur.com/fsyrScY.jpg">
+<img src="exampleImage.jpg">
+</a> -->
+			<div class="thumb hidden-thumb"></div>
+			<div class="thumb hidden-thumb"></div>
+			<div class="thumb hidden-thumb"></div>
+			<div class="thumb hidden-thumb"></div>
+			<div class="thumb hidden-thumb"></div>
+<video id="inline" style="background:#fff" controls class="lity-hide" >
+  <source src="video/dang.mp4" type="video/mp4">
+  Your browser does not support HTML5 video.
+</video> 
 
-  </footer>
-</html>
+		</body>
+		<footer>
+
+			<script src="js/jquery-3.5.0.min.js"></script>
+			<script src="js/lity.js"></script>
+			<script src="js/main.js"></script>
+		</footer>
+	</html>
